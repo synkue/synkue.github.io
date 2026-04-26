@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+
+  <!-- ============ SEO 基础信息（可在此处快速修改）============ -->
+  <title>星鹊软件工作室 Synkue Studio | 定制软件开发 · 系统开发 · 全栈技术外包</title>
+  <meta name="description" content="星鹊软件工作室 Synkue Studio 是一家位于江苏昆山的轻量级软件工作室，专注于定制网站、小程序、企业管理系统、AI 应用、技术外包与全栈开发解决方案。小而精，稳而快。" />
+  <meta name="keywords" content="星鹊软件工作室,Synkue Studio,昆山软件开发,定制软件开发,小程序开发,网站开发,系统开发,程序员外包,技术咨询,AI应用开发,昆山程序员" />
+  <meta name="author" content="Synkue Studio 星鹊软件工作室" />
+  <meta name="theme-color" content="#0a1628" />
+
+  <!-- 社交分享 Open Graph -->
+  <meta property="og:title" content="星鹊软件工作室 Synkue Studio" />
+  <meta property="og:description" content="小而精，稳而快，用技术落地每一个靠谱需求。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="zh_CN" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico" />
+  <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.ico" />
+  <link rel="apple-touch-icon" href="assets/images/synkue-logo.png" />
+
+  <!-- ============ 字体 ============ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+
+  <!-- ============ Tailwind CSS v3（CDN 引入，零构建）============ -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind 自定义配置（品牌色彩 / 字体 / 动画）
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            // 主色：科技深蓝
+            brand: {
+              50:  '#f0f7ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#3b82f6',
+              600: '#1e3a5f',
+              700: '#152a47',
+              800: '#0f2038',
+              900: '#0a1628',
+              950: '#050b16',
+            },
+            // 辅助色：浅青科技
+            accent: {
+              400: '#22d3ee',
+              500: '#06b6d4',
+              600: '#0891b2',
+            },
+            // 马卡龙点缀
+            macaron: {
+              mint: '#a7f3d0',
+              sky:  '#bae6fd',
+              peach:'#fed7aa',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 'sans-serif'],
+          },
+          animation: {
+            'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+            'float':       'float 6s ease-in-out infinite',
+            'gradient':    'gradient 8s ease infinite',
+            'pulse-slow':  'pulse 4s cubic-bezier(0.4,0,0.6,1) infinite',
+          },
+          keyframes: {
+            fadeInUp: {
+              '0%':   { opacity: 0, transform: 'translateY(24px)' },
+              '100%': { opacity: 1, transform: 'translateY(0)' },
+            },
+            float: {
+              '0%,100%': { transform: 'translateY(0)' },
+              '50%':     { transform: 'translateY(-12px)' },
+            },
+            gradient: {
+              '0%,100%': { 'background-position': '0% 50%' },
+              '50%':     { 'background-position': '100% 50%' },
+            },
+          },
+        },
+      },
+    };
+
+    // 在页面渲染前应用主题，避免暗黑模式闪屏
+    (function () {
+      const saved = localStorage.getItem('synkue-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+
+  <!-- ============ 自定义样式 ============ -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<body class="font-sans bg-white text-brand-900 antialiased dark:bg-brand-950 dark:text-slate-100 transition-colors duration-300">
+
+  <!-- ============================================================
+       1. 顶部固定导航栏（滚动时触发毛玻璃效果，移动端汉堡菜单）
+       ============================================================ -->
+  <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <nav class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 flex items-center justify-between h-16 lg:h-20">
+
+      <!-- 左侧：Logo + 品牌名 -->
+      <a href="#home" class="flex items-center gap-3 group">
+        <!-- 品牌 Logo 图片：透明背景 PNG · 直接呈现 · 替换 assets/images/synkue-logo.png 即可换 logo -->
+        <img src="assets/images/synkue-logo.png" alt="星鹊软件工作室 Logo"
+             class="h-10 lg:h-11 w-auto object-contain group-hover:scale-105 transition-transform flex-shrink-0" />
+        <span class="leading-tight">
+          <span class="block text-[15px] lg:text-base font-bold tracking-tight">星鹊软件工作室</span>
+          <span class="block text-[10px] lg:text-xs font-medium text-slate-500 dark:text-slate-400 tracking-[0.18em] uppercase">Synkue Studio</span>
+        </span>
+      </a>
+
+      <!-- 中部：桌面端导航菜单 -->
+      <ul class="hidden lg:flex items-center gap-1 text-sm font-medium">
+        <li><a href="#home"     class="nav-link px-4 py-2 rounded-lg hover:text-accent-500 transition">首页</a></li>
+        <li><a href="#services" class="nav-link px-4 py-2 rounded-lg hover:text-accent-500 transition">服务范围</a></li>
+        <li><a href="#stack"    class="nav-link px-4 py-2 rounded-lg hover:text-accent-500 transition">技术栈</a></li>
+        <li><a href="#cases"    class="nav-link px-4 py-2 rounded-lg hover:text-accent-500 transition">项目案例</a></li>
+        <li><a href="#about"    class="nav-link px-4 py-2 rounded-lg hover:text-accent-500 transition">关于我</a></li>
+        <li><a href="#contact"  class="nav-link px-4 py-2 rounded-lg hover:text-accent-500 transition">联系合作</a></li>
+      </ul>
+
+      <!-- 右侧：暗黑切换 + CTA + 汉堡 -->
+      <div class="flex items-center gap-2">
+        <!-- 暗黑模式切换 -->
+        <button id="theme-toggle" aria-label="切换主题" class="w-10 h-10 rounded-lg flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 transition">
+          <svg class="theme-icon-light w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          <svg class="theme-icon-dark w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+        </button>
+
+        <!-- 桌面端 CTA -->
+        <a href="#contact" class="hidden lg:inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-gradient-to-r from-brand-600 to-accent-500 text-white text-sm font-semibold shadow-lg shadow-accent-500/25 hover:shadow-xl hover:scale-[1.03] transition">
+          立即咨询
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+
+        <!-- 移动端汉堡按钮 -->
+        <button id="menu-toggle" aria-label="菜单" class="lg:hidden w-10 h-10 rounded-lg flex items-center justify-center text-brand-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-white/5 transition">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- 移动端折叠菜单 -->
+    <div id="mobile-menu" class="lg:hidden hidden border-t border-slate-200 dark:border-white/10 bg-white/95 dark:bg-brand-950/95 backdrop-blur-xl">
+      <ul class="px-6 py-4 flex flex-col gap-1 text-base font-medium">
+        <li><a href="#home"     class="mobile-link block py-3 px-3 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5">首页</a></li>
+        <li><a href="#services" class="mobile-link block py-3 px-3 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5">服务范围</a></li>
+        <li><a href="#stack"    class="mobile-link block py-3 px-3 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5">技术栈</a></li>
+        <li><a href="#cases"    class="mobile-link block py-3 px-3 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5">项目案例</a></li>
+        <li><a href="#about"    class="mobile-link block py-3 px-3 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5">关于我</a></li>
+        <li><a href="#contact"  class="mobile-link block py-3 px-3 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5">联系合作</a></li>
+        <li class="pt-2">
+          <a href="#contact" class="mobile-link block text-center py-3 rounded-lg bg-gradient-to-r from-brand-600 to-accent-500 text-white font-semibold">立即咨询合作</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+
+  <!-- ============================================================
+       2. 首屏 Hero 横幅区
+       ============================================================ -->
+  <section id="home" class="relative pt-28 pb-20 lg:pt-36 lg:pb-32 overflow-hidden">
+
+    <!-- 背景：渐变 + 网格 + 浮动光斑 -->
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-brand-950 dark:via-brand-900 dark:to-brand-950"></div>
+      <div class="absolute inset-0 hero-grid opacity-[0.35] dark:opacity-[0.18]"></div>
+      <!-- 浮动光晕（轻柔淡雅） -->
+      <div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-accent-400/12 blur-3xl animate-float"></div>
+      <div class="absolute -bottom-32 -right-32 w-[28rem] h-[28rem] rounded-full bg-brand-500/10 blur-3xl animate-float" style="animation-delay:-3s"></div>
+      <!-- 粒子画布 -->
+      <canvas id="particles" class="absolute inset-0 w-full h-full"></canvas>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 text-center">
+
+      <!-- 标签 -->
+      <div data-animate class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/70 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur text-xs font-medium text-slate-600 dark:text-slate-300 mb-6">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse-slow"></span>
+        现已开放接单 · 江苏昆山 · 全国线上承接
+      </div>
+
+      <!-- 主标题 -->
+      <h1 data-animate class="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6">
+        <span class="block">Synkue Studio</span>
+        <span class="block mt-2 bg-gradient-to-r from-brand-600 via-accent-500 to-brand-500 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+          星鹊软件工作室
+        </span>
+      </h1>
+
+      <!-- 副标题 -->
+      <p data-animate class="max-w-3xl mx-auto text-base sm:text-lg lg:text-xl text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
+        专注定制软件开发 <span class="mx-2 text-accent-500">·</span>
+        系统开发 <span class="mx-2 text-accent-500">·</span>
+        全栈技术开发与数字化解决方案
+      </p>
+
+      <!-- Slogan -->
+      <p data-animate class="text-sm sm:text-base font-medium text-slate-500 dark:text-slate-400 mb-10">
+        小而精，稳而快 — 用技术落地每一个靠谱需求
+      </p>
+
+      <!-- CTA 按钮组 -->
+      <div data-animate class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#contact" class="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-brand-600 to-accent-500 text-white font-semibold shadow-xl shadow-accent-500/25 hover:shadow-2xl hover:scale-[1.03] transition-all">
+          立即咨询合作
+          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#cases" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-brand-900 dark:text-slate-100 font-semibold hover:border-accent-500 hover:text-accent-500 transition-all">
+          查看服务案例
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+        </a>
+      </div>
+
+      <!-- 数据指标 -->
+      <div data-animate class="mt-16 lg:mt-20 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-3xl mx-auto">
+        <div class="text-center">
+          <div class="text-2xl lg:text-3xl font-bold text-brand-600 dark:text-accent-400">50+</div>
+          <div class="text-xs lg:text-sm text-slate-500 dark:text-slate-400 mt-1">交付项目</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl lg:text-3xl font-bold text-brand-600 dark:text-accent-400">10年+</div>
+          <div class="text-xs lg:text-sm text-slate-500 dark:text-slate-400 mt-1">开发经验</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl lg:text-3xl font-bold text-brand-600 dark:text-accent-400">100%</div>
+          <div class="text-xs lg:text-sm text-slate-500 dark:text-slate-400 mt-1">本人对接</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl lg:text-3xl font-bold text-brand-600 dark:text-accent-400">7×24</div>
+          <div class="text-xs lg:text-sm text-slate-500 dark:text-slate-400 mt-1">售后响应</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       3. 关于工作室介绍
+       ============================================================ -->
+  <section id="about" class="relative py-20 lg:py-28">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+        <!-- 左：文字 -->
+        <div data-animate>
+          <span class="inline-block px-3 py-1 rounded-full bg-accent-500/10 text-accent-600 dark:text-accent-400 text-xs font-semibold tracking-wider uppercase mb-4">About · 关于我们</span>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-6">
+            一位独立全栈开发者<br/>
+            <span class="text-brand-600 dark:text-accent-400">+ 一间昆山本地工作室</span>
+          </h2>
+          <p class="text-slate-600 dark:text-slate-300 text-base lg:text-lg leading-relaxed mb-4">
+            我们是 <strong class="text-brand-700 dark:text-slate-100">昆山市星鹊软件工作室</strong>（个体工商户），扎根于江苏昆山，服务全国客户。
+            没有复杂层级、没有销售套路，从需求沟通到方案设计，从代码实现到上线交付，全部由本人亲自完成与负责。
+          </p>
+          <p class="text-slate-600 dark:text-slate-300 text-base lg:text-lg leading-relaxed mb-8">
+            我们相信：<strong class="text-brand-700 dark:text-slate-100">小而精的工作室</strong>，
+            可以做出比中大型外包公司更靠谱、更高性价比、更贴合需求的软件产品。
+          </p>
+
+          <!-- 优势点列表 -->
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3">
+              <span class="mt-1 w-5 h-5 rounded-md bg-accent-500/15 text-accent-600 dark:text-accent-400 flex items-center justify-center flex-shrink-0">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+              </span>
+              <span class="text-slate-600 dark:text-slate-300"><strong class="text-brand-700 dark:text-slate-100">灵活高效</strong>：响应快、迭代快、改动快，不卡流程</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-1 w-5 h-5 rounded-md bg-accent-500/15 text-accent-600 dark:text-accent-400 flex items-center justify-center flex-shrink-0">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+              </span>
+              <span class="text-slate-600 dark:text-slate-300"><strong class="text-brand-700 dark:text-slate-100">高性价比</strong>：去除中间商，价格普遍低于公司报价 30%-60%</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-1 w-5 h-5 rounded-md bg-accent-500/15 text-accent-600 dark:text-accent-400 flex items-center justify-center flex-shrink-0">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+              </span>
+              <span class="text-slate-600 dark:text-slate-300"><strong class="text-brand-700 dark:text-slate-100">一对一沟通</strong>：开发者本人全程对接，需求传递不失真</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-1 w-5 h-5 rounded-md bg-accent-500/15 text-accent-600 dark:text-accent-400 flex items-center justify-center flex-shrink-0">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+              </span>
+              <span class="text-slate-600 dark:text-slate-300"><strong class="text-brand-700 dark:text-slate-100">长期维护</strong>：交付不是结束，提供长期售后与技术支持</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 右：插图区域（CSS 渲染的极客风装饰） -->
+        <div data-animate class="relative">
+          <!-- 主装饰卡片：终端 + 代码 -->
+          <div class="relative rounded-2xl bg-gradient-to-br from-brand-900 to-brand-800 dark:from-brand-900 dark:to-black p-1 shadow-2xl shadow-brand-900/30">
+            <div class="rounded-[14px] bg-brand-950 p-6 font-mono text-sm">
+              <!-- 终端窗口栏 -->
+              <div class="flex items-center gap-2 mb-4 pb-3 border-b border-white/10">
+                <span class="w-3 h-3 rounded-full bg-red-400/80"></span>
+                <span class="w-3 h-3 rounded-full bg-yellow-400/80"></span>
+                <span class="w-3 h-3 rounded-full bg-green-400/80"></span>
+                <span class="ml-2 text-xs text-slate-500">~/synkue-studio</span>
+              </div>
+              <!-- 代码内容 -->
+              <div class="space-y-2 text-[13px] leading-relaxed">
+                <p><span class="text-pink-400">const</span> <span class="text-sky-300">studio</span> <span class="text-slate-400">=</span> {</p>
+                <p class="pl-4"><span class="text-emerald-300">name</span><span class="text-slate-400">:</span> <span class="text-amber-300">'星鹊软件工作室'</span><span class="text-slate-400">,</span></p>
+                <p class="pl-4"><span class="text-emerald-300">brand</span><span class="text-slate-400">:</span> <span class="text-amber-300">'Synkue Studio'</span><span class="text-slate-400">,</span></p>
+                <p class="pl-4"><span class="text-emerald-300">city</span><span class="text-slate-400">:</span> <span class="text-amber-300">'江苏 · 昆山'</span><span class="text-slate-400">,</span></p>
+                <p class="pl-4"><span class="text-emerald-300">stack</span><span class="text-slate-400">: [</span><span class="text-amber-300">'前端'</span><span class="text-slate-400">,</span> <span class="text-amber-300">'后端'</span><span class="text-slate-400">,</span> <span class="text-amber-300">'AI'</span><span class="text-slate-400">],</span></p>
+                <p class="pl-4"><span class="text-emerald-300">mission</span><span class="text-slate-400">:</span> <span class="text-amber-300">'落地靠谱需求'</span><span class="text-slate-400">,</span></p>
+                <p class="pl-4"><span class="text-emerald-300">status</span><span class="text-slate-400">:</span> <span class="text-amber-300">'open-for-work'</span><span class="text-slate-400">,</span></p>
+                <p><span class="text-slate-400">};</span></p>
+                <p class="pt-2"><span class="text-slate-500">$</span> <span class="text-accent-400">npm run</span> <span class="text-slate-100">your-idea</span><span class="inline-block w-2 h-4 ml-1 bg-accent-400 align-middle animate-pulse"></span></p>
+              </div>
+            </div>
+          </div>
+          <!-- 装饰：浮动徽章 -->
+          <div class="absolute -top-6 -right-4 px-4 py-2 rounded-xl bg-white dark:bg-brand-800 border border-slate-200 dark:border-white/10 shadow-lg flex items-center gap-2 animate-float">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span class="text-xs font-medium">Online · 在线接单中</span>
+          </div>
+          <div class="absolute -bottom-6 -left-4 px-4 py-2 rounded-xl bg-white dark:bg-brand-800 border border-slate-200 dark:border-white/10 shadow-lg flex items-center gap-2 animate-float" style="animation-delay:-2s">
+            <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.39 7.36H22l-6.18 4.49L18.21 21 12 16.51 5.79 21l2.39-7.15L2 9.36h7.61z"/></svg>
+            <span class="text-xs font-medium">10+ 年开发经验</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       4. 核心服务范围
+       ============================================================ -->
+  <section id="services" class="relative py-20 lg:py-28 bg-slate-50/60 dark:bg-brand-900/30">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+
+      <!-- 标题区 -->
+      <div data-animate class="text-center max-w-2xl mx-auto mb-14 lg:mb-20">
+        <span class="inline-block px-3 py-1 rounded-full bg-accent-500/10 text-accent-600 dark:text-accent-400 text-xs font-semibold tracking-wider uppercase mb-4">Services · 服务范围</span>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4">我们能为您做什么</h2>
+        <p class="text-slate-600 dark:text-slate-300 text-base lg:text-lg">从一行代码到完整产品，覆盖软件项目全生命周期</p>
+      </div>
+
+      <!-- 服务卡片网格 -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+
+        <!-- 卡片 1：网站开发 -->
+        <article data-animate class="service-card group">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20M6 6h.01M10 6h.01"/></svg>
+          </div>
+          <h3 class="service-title">定制网站 & 门户网站</h3>
+          <p class="service-desc">企业官网、品牌官网、政府门户、SaaS 营销站，从设计到部署一站式交付。</p>
+          <ul class="service-tags">
+            <li>响应式</li><li>SEO优化</li><li>CMS后台</li>
+          </ul>
+        </article>
+
+        <!-- 卡片 2：小程序 H5 -->
+        <article data-animate class="service-card group">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+          </div>
+          <h3 class="service-title">小程序 / H5 / 互动网页</h3>
+          <p class="service-desc">微信小程序、抖音小程序、营销活动 H5、互动游戏页、扫码工具页面。</p>
+          <ul class="service-tags">
+            <li>微信</li><li>抖音</li><li>支付宝</li>
+          </ul>
+        </article>
+
+        <!-- 卡片 3：管理工具 -->
+        <article data-animate class="service-card group">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
+          </div>
+          <h3 class="service-title">企业管理 & 自动化系统</h3>
+          <p class="service-desc">CRM、ERP 简化版、进销存、OA、爬虫工具、批处理脚本、内部小工具。</p>
+          <ul class="service-tags">
+            <li>权限管理</li><li>数据看板</li><li>自动化</li>
+          </ul>
+        </article>
+
+        <!-- 卡片 4：AI 应用 -->
+        <article data-animate class="service-card group">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4M8 12H4M16 12h4M12 16v4"/><circle cx="12" cy="12" r="4"/><path d="M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>
+          </div>
+          <h3 class="service-title">AI 应用 & Agent 定制</h3>
+          <p class="service-desc">基于 OpenAI / Claude / Gemini 等大模型的对话机器人、Agent、知识库 RAG 应用。</p>
+          <ul class="service-tags">
+            <li>RAG</li><li>Agent</li><li>对接微信</li>
+          </ul>
+        </article>
+
+        <!-- 卡片 5：技术外包 -->
+        <article data-animate class="service-card group">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+          </div>
+          <h3 class="service-title">软件外包 & 代码迭代</h3>
+          <p class="service-desc">承接已有项目的功能迭代、代码重构、BUG 修复、性能优化、技术债务清理。</p>
+          <ul class="service-tags">
+            <li>重构</li><li>修Bug</li><li>性能优化</li>
+          </ul>
+        </article>
+
+        <!-- 卡片 6：技术咨询 -->
+        <article data-animate class="service-card group">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h3 class="service-title">技术咨询 & 方案定制</h3>
+          <p class="service-desc">为创业者、小团队提供选型咨询、技术方案设计、架构评估、MVP 快速验证。</p>
+          <ul class="service-tags">
+            <li>选型</li><li>架构</li><li>MVP</li>
+          </ul>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       5. 技术能力栈
+       ============================================================ -->
+  <section id="stack" class="relative py-20 lg:py-28">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+
+      <div data-animate class="text-center max-w-2xl mx-auto mb-14 lg:mb-20">
+        <span class="inline-block px-3 py-1 rounded-full bg-accent-500/10 text-accent-600 dark:text-accent-400 text-xs font-semibold tracking-wider uppercase mb-4">Tech Stack · 技术栈</span>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4">主流而成熟的技术栈</h2>
+        <p class="text-slate-600 dark:text-slate-300 text-base lg:text-lg">不追求时髦冷门，只用稳定、社区活跃、可长期维护的方案</p>
+      </div>
+
+      <!-- 四大领域栈 -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+
+        <div data-animate class="stack-card">
+          <div class="stack-header">
+            <div class="stack-icon bg-blue-500/10 text-blue-500">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <h3 class="stack-title">前端 Frontend</h3>
+          </div>
+          <ul class="stack-tags">
+            <li>Vue 3</li><li>React 18</li><li>Next.js</li>
+            <li>原生 JS</li><li>TypeScript</li><li>Tailwind</li>
+          </ul>
+        </div>
+
+        <div data-animate class="stack-card">
+          <div class="stack-header">
+            <div class="stack-icon bg-emerald-500/10 text-emerald-500">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17l10 5 10-5M2 12l10 5 10-5M12 2 2 7l10 5 10-5z"/></svg>
+            </div>
+            <h3 class="stack-title">后端 Backend</h3>
+          </div>
+          <ul class="stack-tags">
+            <li>Python</li><li>Go</li><li>Java</li>
+            <li>Node.js</li><li>FastAPI</li><li>Spring Boot</li>
+          </ul>
+        </div>
+
+        <div data-animate class="stack-card">
+          <div class="stack-header">
+            <div class="stack-icon bg-amber-500/10 text-amber-500">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5M3 12a9 3 0 0 0 18 0"/></svg>
+            </div>
+            <h3 class="stack-title">数据库 Database</h3>
+          </div>
+          <ul class="stack-tags">
+            <li>MySQL</li><li>PostgreSQL</li><li>Redis</li>
+            <li>MongoDB</li><li>SQLite</li><li>向量库</li>
+          </ul>
+        </div>
+
+        <div data-animate class="stack-card">
+          <div class="stack-header">
+            <div class="stack-icon bg-purple-500/10 text-purple-500">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <h3 class="stack-title">DevOps & 其他</h3>
+          </div>
+          <ul class="stack-tags">
+            <li>Docker</li><li>Nginx</li><li>Linux</li>
+            <li>CI/CD</li><li>API 对接</li><li>私有化部署</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- 横向技能徽章流 -->
+      <div data-animate class="mt-12 lg:mt-16 flex flex-wrap items-center justify-center gap-3">
+        <span class="badge-pill">微信生态</span>
+        <span class="badge-pill">抖音开放平台</span>
+        <span class="badge-pill">支付宝小程序</span>
+        <span class="badge-pill">企业微信</span>
+        <span class="badge-pill">钉钉</span>
+        <span class="badge-pill">飞书</span>
+        <span class="badge-pill">OpenAI</span>
+        <span class="badge-pill">Claude</span>
+        <span class="badge-pill">阿里云 / 腾讯云</span>
+        <span class="badge-pill">SEO 优化</span>
+        <span class="badge-pill">数据爬虫</span>
+        <span class="badge-pill">API 对接</span>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       6. 项目案例作品集
+       ============================================================ -->
+  <section id="cases" class="relative py-20 lg:py-28 bg-slate-50/60 dark:bg-brand-900/30">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+
+      <div data-animate class="text-center max-w-2xl mx-auto mb-14 lg:mb-20">
+        <span class="inline-block px-3 py-1 rounded-full bg-accent-500/10 text-accent-600 dark:text-accent-400 text-xs font-semibold tracking-wider uppercase mb-4">Cases · 项目案例</span>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4">部分代表项目</h2>
+        <p class="text-slate-600 dark:text-slate-300 text-base lg:text-lg">从 0 到 1 落地的真实项目（涉及客户隐私的项目已脱敏）</p>
+      </div>
+
+      <!-- 案例网格：6 个卡片 -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-7">
+
+        <article data-animate class="case-card group">
+          <div class="case-thumb" style="background:linear-gradient(135deg,#0f2038 0%, #1e3a5f 100%);">
+            <span class="case-thumb-text">Web · 官网</span>
+          </div>
+          <div class="case-body">
+            <h3 class="case-title">某品牌企业官网改版</h3>
+            <p class="case-desc">为本地制造业品牌重新设计开发的中英双语官网，含 CMS 后台与 SEO 优化。</p>
+            <div class="case-tags"><span>Vue 3</span><span>Tailwind</span><span>Strapi</span></div>
+          </div>
+        </article>
+
+        <article data-animate class="case-card group">
+          <div class="case-thumb" style="background:linear-gradient(135deg,#1e3a5f 0%, #0891b2 100%);">
+            <span class="case-thumb-text">Mini · 小程序</span>
+          </div>
+          <div class="case-body">
+            <h3 class="case-title">餐饮连锁会员小程序</h3>
+            <p class="case-desc">门店点餐、会员卡、积分商城、订单核销，对接微信支付与企业微信通知。</p>
+            <div class="case-tags"><span>微信小程序</span><span>Node.js</span><span>MySQL</span></div>
+          </div>
+        </article>
+
+        <article data-animate class="case-card group">
+          <div class="case-thumb" style="background:linear-gradient(160deg,#0e7490 0%, #1e3a5f 100%);">
+            <span class="case-thumb-text">SaaS · 系统</span>
+          </div>
+          <div class="case-body">
+            <h3 class="case-title">小型 SaaS 进销存系统</h3>
+            <p class="case-desc">面向中小批发商的库存、订单、客户、财务一体化系统，含数据看板。</p>
+            <div class="case-tags"><span>React</span><span>Go</span><span>PostgreSQL</span></div>
+          </div>
+        </article>
+
+        <article data-animate class="case-card group">
+          <div class="case-thumb" style="background:linear-gradient(135deg,#152a47 0%, #06b6d4 100%);">
+            <span class="case-thumb-text">AI · Agent</span>
+          </div>
+          <div class="case-body">
+            <h3 class="case-title">企业知识库 AI 问答助手</h3>
+            <p class="case-desc">基于 RAG 的私有知识库问答，支持文档上传、向量检索、多轮对话与微信对接。</p>
+            <div class="case-tags"><span>Python</span><span>LangChain</span><span>向量库</span></div>
+          </div>
+        </article>
+
+        <article data-animate class="case-card group">
+          <div class="case-thumb" style="background:linear-gradient(160deg,#1e3a5f 0%, #334155 100%);">
+            <span class="case-thumb-text">Tool · 工具</span>
+          </div>
+          <div class="case-body">
+            <h3 class="case-title">数据采集与自动报表工具</h3>
+            <p class="case-desc">定时爬取多源数据 → 清洗 → 汇总 → 自动生成日报推送到企业微信群。</p>
+            <div class="case-tags"><span>Python</span><span>Playwright</span><span>定时任务</span></div>
+          </div>
+        </article>
+
+        <article data-animate class="case-card group">
+          <div class="case-thumb" style="background:linear-gradient(135deg,#0891b2 0%, #1e3a5f 100%);">
+            <span class="case-thumb-text">H5 · 营销</span>
+          </div>
+          <div class="case-body">
+            <h3 class="case-title">品牌活动互动 H5</h3>
+            <p class="case-desc">扫码抽奖、邀请排行榜、答题闯关，配套后台数据统计与导出。</p>
+            <div class="case-tags"><span>原生 JS</span><span>Canvas</span><span>FastAPI</span></div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- 案例下方提示 -->
+      <p data-animate class="text-center text-sm text-slate-500 dark:text-slate-400 mt-10">
+        * 因合作客户保密协议，部分案例信息已做脱敏处理。如需查看完整 Demo 或案例细节，欢迎私信沟通。
+      </p>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       7. 信任优势 · 为什么选择我们
+       ============================================================ -->
+  <section id="why" class="relative py-20 lg:py-28">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+
+      <div data-animate class="text-center max-w-2xl mx-auto mb-14 lg:mb-20">
+        <span class="inline-block px-3 py-1 rounded-full bg-accent-500/10 text-accent-600 dark:text-accent-400 text-xs font-semibold tracking-wider uppercase mb-4">Why Us · 为什么选择我们</span>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4">个体工作室的四大优势</h2>
+        <p class="text-slate-600 dark:text-slate-300 text-base lg:text-lg">小团队 ≠ 不专业，反而更靠谱</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+
+        <div data-animate class="why-card">
+          <div class="why-num">01</div>
+          <h3 class="why-title">价格性价比拉满</h3>
+          <p class="why-desc">个体工作室，砍掉公司层级与销售提成，同样的需求价格普遍低 30%-60%。</p>
+        </div>
+
+        <div data-animate class="why-card">
+          <div class="why-num">02</div>
+          <h3 class="why-title">本人 0 偏差对接</h3>
+          <p class="why-desc">从首次沟通到最终交付，开发者本人全程负责，需求传达不失真、不二传话。</p>
+        </div>
+
+        <div data-animate class="why-card">
+          <div class="why-num">03</div>
+          <h3 class="why-title">交付透明无套路</h3>
+          <p class="why-desc">分阶段验收、每周进度同步、源码完整交付，拒绝合同陷阱与后期加价。</p>
+        </div>
+
+        <div data-animate class="why-card">
+          <div class="why-num">04</div>
+          <h3 class="why-title">长期售后维护</h3>
+          <p class="why-desc">交付不是终点，提供长期 BUG 修复、版本迭代、服务器运维等持续技术支持。</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       8. 联系合作
+       ============================================================ -->
+  <section id="contact" class="relative py-20 lg:py-28 bg-slate-50/60 dark:bg-brand-900/30">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+
+      <div data-animate class="text-center max-w-2xl mx-auto mb-14 lg:mb-20">
+        <span class="inline-block px-3 py-1 rounded-full bg-accent-500/10 text-accent-600 dark:text-accent-400 text-xs font-semibold tracking-wider uppercase mb-4">Contact · 开启项目合作</span>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4">聊聊您的需求</h2>
+        <p class="text-slate-600 dark:text-slate-300 text-base lg:text-lg">无论需求大小，均可<strong class="text-brand-700 dark:text-accent-400">免费沟通评估方案</strong>，不强制下单</p>
+      </div>
+
+      <div class="grid lg:grid-cols-5 gap-6 lg:gap-8 items-stretch">
+
+        <!-- 左：微信二维码主视觉 -->
+        <div data-animate class="lg:col-span-2">
+          <div class="h-full bg-white dark:bg-brand-900/60 border border-slate-200 dark:border-white/10 rounded-2xl p-6 lg:p-8 flex flex-col items-center justify-center text-center">
+            <p class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-4">扫码添加微信 · 1 对 1 沟通</p>
+            <div class="bg-white p-3 rounded-xl shadow-sm ring-1 ring-slate-200">
+              <img src="assets/images/wx.jpg" alt="星鹊软件工作室微信二维码" class="w-44 h-44 lg:w-52 lg:h-52 block" />
+            </div>
+            <p class="mt-5 text-base font-semibold text-brand-900 dark:text-slate-100">添加请备注「定制开发」</p>
+            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">免费需求评估 · 不强制下单</p>
+          </div>
+        </div>
+
+        <!-- 中：联系方式列表 -->
+        <div data-animate class="lg:col-span-3 grid sm:grid-cols-2 gap-4">
+
+          <a href="tel:18051738385" class="info-tile">
+            <div class="info-tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <p class="info-tile-label">手机 · 微信同号</p>
+            <p class="info-tile-value">180 5173 8385</p>
+          </a>
+
+          <a href="mailto:yuxink@126.com" class="info-tile">
+            <div class="info-tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
+            </div>
+            <p class="info-tile-label">邮箱合作</p>
+            <p class="info-tile-value">yuxink@126.com</p>
+          </a>
+
+          <div class="info-tile cursor-default">
+            <div class="info-tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <p class="info-tile-label">所在城市</p>
+            <p class="info-tile-value">江苏 · 昆山</p>
+            <p class="info-tile-sub">全国线上承接</p>
+          </div>
+
+          <div class="info-tile cursor-default">
+            <div class="info-tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <p class="info-tile-label">响应时间</p>
+            <p class="info-tile-value">1 小时内</p>
+            <p class="info-tile-sub">工作时间 · 9:00 - 22:00</p>
+          </div>
+
+          <!-- 跨两列的引导卡片 -->
+          <div class="sm:col-span-2 rounded-2xl bg-gradient-to-br from-brand-600 to-accent-500 text-white p-5 lg:p-6 flex items-center gap-4">
+            <div class="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="font-semibold text-sm sm:text-base">不方便扫码？直接电话或邮件均可</p>
+              <p class="text-xs sm:text-sm text-white/80 mt-0.5">提交需求后，24 小时内必回复</p>
+            </div>
+            <a href="tel:18051738385" class="hidden sm:inline-flex flex-shrink-0 px-4 py-2 rounded-lg bg-white/15 hover:bg-white/25 text-sm font-medium transition">立即拨打</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       9. 页脚
+       ============================================================ -->
+  <footer class="bg-slate-50 dark:bg-brand-950 border-t border-slate-200 dark:border-white/10">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 py-12 lg:py-16">
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+
+        <!-- 品牌简介 -->
+        <div class="lg:col-span-2">
+          <div class="flex items-center gap-3 mb-4">
+            <img src="assets/images/synkue-logo.png" alt="星鹊软件工作室 Logo"
+                 class="h-11 w-auto object-contain flex-shrink-0" />
+            <span class="leading-tight">
+              <span class="block text-base font-bold">星鹊软件工作室</span>
+              <span class="block text-xs font-medium text-slate-500 dark:text-slate-400 tracking-[0.18em] uppercase">Synkue Studio</span>
+            </span>
+          </div>
+          <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-md">
+            一间扎根于江苏昆山的轻量级软件工作室，专注定制开发、系统开发、技术外包与 AI 应用。
+            小而精，稳而快，用技术落地每一个靠谱需求。
+          </p>
+        </div>
+
+        <!-- 服务 -->
+        <div>
+          <h4 class="text-sm font-semibold mb-4">服务范围</h4>
+          <ul class="space-y-2 text-sm text-slate-500 dark:text-slate-400">
+            <li><a href="#services" class="hover:text-accent-500 transition">定制网站开发</a></li>
+            <li><a href="#services" class="hover:text-accent-500 transition">小程序 / H5</a></li>
+            <li><a href="#services" class="hover:text-accent-500 transition">管理系统</a></li>
+            <li><a href="#services" class="hover:text-accent-500 transition">AI 应用定制</a></li>
+            <li><a href="#services" class="hover:text-accent-500 transition">技术咨询</a></li>
+          </ul>
+        </div>
+
+        <!-- 联系 -->
+        <div>
+          <h4 class="text-sm font-semibold mb-4">联系我们</h4>
+          <ul class="space-y-2 text-sm text-slate-500 dark:text-slate-400">
+            <li>手机/微信：180 5173 8385</li>
+            <li>邮箱：yuxink@126.com</li>
+            <li>地址：江苏 · 昆山</li>
+            <li>工作时间：9:00 - 22:00</li>
+          </ul>
+
+          <!-- 社交图标 -->
+          <div class="flex items-center gap-2 mt-5">
+            <a href="#" class="footer-social" aria-label="微信"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11a4 4 0 1 0-4-4M15 13a3.5 3.5 0 1 1 7 0c0 2-2 3-2 4l.5 2-2-1c-1 .5-2 .5-3.5.5a3.5 3.5 0 0 1-3.5-3.5"/></svg></a>
+            <a href="#" class="footer-social" aria-label="GitHub"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-.99-.01-1.94-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.27-1.68-1.27-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.73-1.53-2.55-.29-5.24-1.27-5.24-5.66 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.16 1.17a10.95 10.95 0 0 1 5.76 0c2.2-1.48 3.16-1.17 3.16-1.17.62 1.58.23 2.75.11 3.04.74.8 1.18 1.82 1.18 3.07 0 4.4-2.69 5.36-5.25 5.65.41.35.78 1.04.78 2.1 0 1.52-.01 2.74-.01 3.11 0 .3.21.66.8.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg></a>
+            <a href="#" class="footer-social" aria-label="邮箱"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg></a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 版权 / 备案 -->
+      <div class="pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400">
+        <p>© 2026 昆山市星鹊软件工作室 Synkue Studio · 版权所有</p>
+        <p class="space-x-3">
+          <!-- 备案号占位（上线后替换为工信部 / 公安备案号） -->
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="nofollow noreferrer" class="hover:text-accent-500 transition">苏ICP备 0000000号-1</a>
+          <span>·</span>
+          <a href="#" class="hover:text-accent-500 transition">隐私政策</a>
+          <span>·</span>
+          <a href="#" class="hover:text-accent-500 transition">服务条款</a>
+        </p>
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- ============================================================
+       回到顶部按钮
+       ============================================================ -->
+  <button id="back-to-top" aria-label="回到顶部" class="fixed bottom-6 right-6 lg:bottom-8 lg:right-8 w-11 h-11 lg:w-12 lg:h-12 rounded-full bg-gradient-to-br from-brand-600 to-accent-500 text-white shadow-xl shadow-accent-500/25 opacity-0 pointer-events-none translate-y-4 transition-all duration-300 z-40 flex items-center justify-center hover:scale-110">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+  </button>
+
+  <!-- 主交互脚本 -->
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
