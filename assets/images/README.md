@@ -16,7 +16,7 @@
 在 `index.html` 中找到 `<!-- 6. 项目案例作品集 -->` 区段，将类似下面这种渐变占位：
 
 ```html
-<div class="case-thumb" style="background:linear-gradient(135deg,#3b82f6 0%, #06b6d4 100%);">
+<div class="case-thumb" style="background:linear-gradient(135deg,#1d4373 0%, #409EFF 100%);">
   <span class="case-thumb-text">Project · Web</span>
 </div>
 ```

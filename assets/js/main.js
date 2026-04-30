@@ -205,7 +205,7 @@
     }
     toast.textContent = msg;
     toast.style.background = type === 'success'
-      ? 'linear-gradient(135deg,#0891b2,#06b6d4)'
+      ? 'linear-gradient(135deg,#337ecc,#409EFF)'
       : 'rgba(15, 32, 56, .94)';
     requestAnimationFrame(() => {
       toast.style.opacity = '1';
@@ -231,8 +231,8 @@
 
     function getColor() {
       return docEl.classList.contains('dark')
-        ? 'rgba(34, 211, 238, '   // 暗黑：青色
-        : 'rgba(30, 58, 95, ';     // 浅色：深蓝
+        ? 'rgba(121, 187, 255, '   // 暗黑：浅蓝 #79bbff
+        : 'rgba(64, 158, 255, ';    // 浅色：品牌蓝 #409EFF
     }
     let color = getColor();
 
@@ -312,6 +312,32 @@
       start();
       window.addEventListener('resize', () => { start(); });
     }
+  }
+
+  /* -------------------------------------------------------------------
+   * 8. 电子名片：仅展示（打开 / 关闭，纯静态预览，无下载/截图依赖）
+   * ----------------------------------------------------------------- */
+  const cardModal  = $('#card-modal');
+  const openCardBt = $('#open-card');
+
+  if (openCardBt && cardModal) {
+    function openCardModal() {
+      cardModal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCardModal() {
+      cardModal.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    openCardBt.addEventListener('click', openCardModal);
+    cardModal.querySelectorAll('[data-card-close]').forEach((el) => {
+      el.addEventListener('click', closeCardModal);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && cardModal.classList.contains('is-open')) closeCardModal();
+    });
   }
 
   /* -------------------------------------------------------------------
